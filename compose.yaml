@@ -1,0 +1,15 @@
+﻿services:
+  webactions:
+    image: webactions
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    build:
+      context: .
+      dockerfile: WebActions/Dockerfile
+  
+  unit-tests:
+    build:
+      context: .
+      dockerfile: WebActionsTests/Dockerfile
+      

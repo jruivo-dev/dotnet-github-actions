@@ -1,21 +1,20 @@
-﻿FROM mcr.microsoft.com/dotnet/runtime:9.0 AS base
-USER $APP_UID
-WORKDIR /app
+﻿# Use the .NET SDK image since we need to run tests
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS test
 
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
-ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
+
+# Copy the solution and projects
+COPY ["WebActions/WebActions.csproj", "WebActions/"]
 COPY ["WebActionsTests/WebActionsTests.csproj", "WebActionsTests/"]
+
+# Restore dependencies for the solution (both projects)
 RUN dotnet restore "WebActionsTests/WebActionsTests.csproj"
+
+# Copy the rest of the source
 COPY . .
+
+# Set working directory to the test project
 WORKDIR "/src/WebActionsTests"
-RUN dotnet build "./WebActionsTests.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./WebActionsTests.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
-
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "WebActionsTests.dll"]
+# Run the tests when this container starts
+ENTRYPOINT ["dotnet", "test", "--logger:trx;LogFileName=test_results.trx"]

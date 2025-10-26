@@ -1,0 +1,21 @@
+# This is a generated file. Not intended for manual editing.
+services:
+  webactions:
+    build:
+      context: "/Users/ruivo/Documents/csharp-dotnet/WebActions"
+      dockerfile: "WebActions/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net9.0/WebActions.dll"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "webactions:dev"
+    ports: []
+    volumes:
+    - "/Users/ruivo/Documents/csharp-dotnet/WebActions/WebActions:/app:rw"
+    - "/Users/ruivo/Documents/csharp-dotnet/WebActions:/src:rw"
+    - "/Users/ruivo/.nuget/packages:/home/app/.nuget/packages"
+    working_dir: "/app"
