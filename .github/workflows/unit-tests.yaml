@@ -27,11 +27,13 @@ jobs:
       # create your own step of adding it to the job summary. I am
       # intentionally doing that to show job summaries
       - name: Create test summary
-        uses: test-summary/action@v2.4
+        uses: dorny/test-reporter@v2
         with:
-          paths: ${{ github.workspace }}/results/*.trx
-          output: ${{ github.workspace }}/results/summary.md
-          show: "all"
+          name: Unit tests report
+          reporter: dotnet-trx
+          path: ${{ github.workspace }}/results/*.trx
+#          output: ${{ github.workspace }}/results/summary.md
+#          show: "all"
         if: always()
 
       # I am adding the test results to the Job Summary
