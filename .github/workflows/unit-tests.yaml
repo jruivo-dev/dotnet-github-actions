@@ -9,12 +9,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+        
       - uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '8.0.x'
-      - name: Restore
+      - name: Install dependencies
         run: dotnet restore
+        
       - name: Build
         run: dotnet build --no-restore --configuration Release
+      
       - name: Test
-        run: dotnet test --no-build --verbosity normal
+        run: dotnet test ./WebActionsTests/WebActionsTests.csproj  --no-restore --verbosity normal
