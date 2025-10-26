@@ -9,37 +9,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-        
+
       - uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '8.0.x'
       - name: Install dependencies
         run: dotnet restore
-        
+
       - name: Build
         run: dotnet build --no-restore --configuration Release
-      
+
       - name: Test
         run: dotnet test ./WebActionsTests/WebActionsTests.csproj --no-restore --verbosity normal --logger:"trx;LogFileName=test-results.trx" --results-directory ${{ github.workspace }}/results
-      # create a test summary markdown file
-      # if you don't specify an output file, it will automatically add
-      # as a job summary. If you specify an output file, you have to
-      # create your own step of adding it to the job summary. I am
-      # intentionally doing that to show job summaries
+
       - name: Create test summary
         uses: dorny/test-reporter@v2
         with:
           name: Unit tests report
           reporter: dotnet-trx
           path: ${{ github.workspace }}/results/*.trx
-#          output: ${{ github.workspace }}/results/summary.md
-#          show: "all"
-        if: always()
-
-      # I am adding the test results to the Job Summary
-      - name: Add Test Results To Job Summary
-        run: |
-          echo "TEST RESULTS:" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY # this is a blank line
-          cat "${{ github.workspace }}/results/summary.md" >> $GITHUB_STEP_SUMMARY
         if: always()

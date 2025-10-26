@@ -12,6 +12,6 @@ public sealed class Test1
     [TestMethod]
     public void TestMethod2()
     {
-        Assert.AreEqual(3, 1 + 2);
+        Assert.AreEqual(3, 1 + 4);
     }
 }
