@@ -1,5 +1,5 @@
 ﻿# Use the .NET SDK image since we need to run tests
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS test
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS test
 
 WORKDIR /src
 
